@@ -80,3 +80,42 @@ int main() {
     char buffer[200000];
     sockaddr_in adresaPergjigjes;
     int gjatesiaPergjigjes = sizeof(adresaPergjigjes);
+
+        while (true) {
+        if (llojiKlientit == 1) {
+            cout << "admin> ";
+        } else {
+            cout << "normal> ";
+        }
+        
+        char komanda[5000];
+        cin.getline(komanda, 5000);
+        
+        if (strcmp(komanda, "/exit") == 0) {
+            break;
+        }
+        
+        if (strlen(komanda) == 0) {
+            continue;
+        }
+        
+        // Dergo ping nese ka kaluar 20 sekonda pa aktivitet
+        time_t tani = time(NULL);
+        if (tani - lastPing >= 20) {
+            sendto(sock, "/ping", 5, 0, (sockaddr*)&adresaServerit, sizeof(adresaServerit));
+            lastPing = tani;
+        }
+        
+        sendto(sock, komanda, strlen(komanda), 0,
+               (sockaddr*)&adresaServerit, sizeof(adresaServerit));
+        
+        int numri = recvfrom(sock, buffer, sizeof(buffer) - 1, 0,
+                             (sockaddr*)&adresaPergjigjes, &gjatesiaPergjigjes);
+        
+        if (numri > 0) {
+            buffer[numri] = '\0';
+            cout << buffer << "\n";
+        } else {
+            cout << "Gabim: Nuk u mor pergjigje nga serveri (timeout)! Kontrollo lidhjen.\n";
+        }
+    }
