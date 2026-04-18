@@ -373,5 +373,35 @@ int main() {
                 }
               
             }
-
+         else {
+                
+                int idx = gjejKlientin(ip, port);
+                
+                if (idx != -1) {
+                    listaKlienteve[idx].kohaFundit = time(NULL);
+                    listaKlienteve[idx].numriKerkesave++;
+                    
+                    char pergjigjja[200000];
+                    int gjatesiaPergjigjes = 0;
+                    perpunoKomanden(buffer, listaKlienteve[idx].eshteAdmin, pergjigjja, &gjatesiaPergjigjes);
+                    
+                    if (gjatesiaPergjigjes > 0) {
+                        sendto(sockUdp, pergjigjja, gjatesiaPergjigjes, 0, (sockaddr*)&klientiAdresa, len);
+                        cout << "[PERGJIGJE] Dergova " << gjatesiaPergjigjes << " bytes per komanden: " << buffer << endl;
+                    }
+                }
+                else {
+                    char reply[] = "GABIM: Regjistrohu fillimisht! Perdor REG:1:Emri per admin ose REG:2:Emri per normal\n";
+                    sendto(sockUdp, reply, strlen(reply), 0, (sockaddr*)&klientiAdresa, len);
+                }
+            }
+        }
+        
+        if (time(NULL) - lastTimeoutCheck >= 5) {
+            kontrolloTimeout();
+            lastTimeoutCheck = time(NULL);
+        }
+        
+        Sleep(10);
+    }
                 
