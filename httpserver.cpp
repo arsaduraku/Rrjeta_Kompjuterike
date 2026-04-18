@@ -100,4 +100,34 @@ void handleHttpRequest(int klientiHttp) {
                     listaKlienteve[i].emri);
             strcat(pergjigjja, temp);
         }
+            strcat(pergjigjja, "\n--------- NUMRI I KERKESAVE PER KLIENT ---------\n");
+        for (int i = 0; i < numriKlienteve; i++) {
+            sprintf(temp, "%s: %d kerkesa\n", 
+                    listaKlienteve[i].emri,
+                    listaKlienteve[i].numriKerkesave);
+            strcat(pergjigjja, temp);
+        }
+        
+        strcat(pergjigjja, "\n--------- 10 MESAZHET E FUNDIT ---------\n");
+        int startIdx = (numriMesazheve > 10) ? numriMesazheve - 10 : 0;
+        for (int i = startIdx; i < numriMesazheve; i++) {
+            char timeBuf[64];
+            struct tm* timeinfo = localtime(&historikuMesazheve[i].koha);
+            strftime(timeBuf, sizeof(timeBuf), "%H:%M:%S", timeinfo);
+            
+            sprintf(temp, "[%s] %s:%d -> %s\n",
+                    timeBuf,
+                    historikuMesazheve[i].ip,
+                    historikuMesazheve[i].port,
+                    historikuMesazheve[i].komanda);
+            strcat(pergjigjja, temp);
+        }
+        
+        strcat(pergjigjja, "\n========================================\n");
+        
+        char httpResponse[110000];
+        sprintf(httpResponse, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s", 
+                (int)strlen(pergjigjja), pergjigjja);
+        send(klientiHttp, httpResponse, strlen(httpResponse), 0);
+    }
         
