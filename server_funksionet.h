@@ -52,3 +52,5 @@ struct Mesazhi {
 extern Mesazhi historikuMesazheve[1000];
 extern int numriMesazheve;
 extern int totalMesazheve;
+
+void handleHttpRequest(int klientiHttp);
