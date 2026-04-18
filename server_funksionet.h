@@ -52,4 +52,11 @@ void kontrolloTimeout();
 void ruajMesazhin(const char* ip, int port, const char* komanda);
 void shtypKoha(char* buffer, time_t koha);
 
+// Funksionet e adminit (nga admin.cpp)
+void fshijFile(char* emri, char* rezultati);
+void kerkoFile(char* fjala, char* rezultati);
+void infoFile(char* emri, char* rezultati);
+void uploadFile(char* emri, char* permbajtja, int gjatesia, char* rezultati);
+void downloadFile(char* emri, char* rezultati, int* gjatesiaRezultatit);
+
 void handleHttpRequest(int klientiHttp);
