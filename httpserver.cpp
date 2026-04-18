@@ -62,7 +62,7 @@ void handleHttpRequest(int klientiHttp) {
                     j++;
                 }
             }
-                        sprintf(temp, "    {\"koha\": \"%s\", \"ip\": \"%s\", \"port\": %d, \"komanda\": \"%s\"}%s\n",
+                  sprintf(temp, "    {\"koha\": \"%s\", \"ip\": \"%s\", \"port\": %d, \"komanda\": \"%s\"}%s\n",
                     timeBuf,
                     historikuMesazheve[i].ip,
                     historikuMesazheve[i].port,
@@ -78,3 +78,26 @@ void handleHttpRequest(int klientiHttp) {
         sprintf(httpResponse, "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s", 
                 (int)strlen(pergjigjja), pergjigjja);
         send(klientiHttp, httpResponse, strlen(httpResponse), 0);
+
+         } else if (eshteStats) {
+        // Formati tekst (default)
+        strcat(pergjigjja, "========================================\n");
+        strcat(pergjigjja, "        STATISTIKAT E SERVERIT         \n");
+        strcat(pergjigjja, "========================================\n\n");
+        
+        sprintf(temp, "Lidhje aktive: %d / %d\n", numriKlienteve, MAX_KLIENTE);
+        strcat(pergjigjja, temp);
+        
+        sprintf(temp, "Total mesazhe: %d\n\n", totalMesazheve);
+        strcat(pergjigjja, temp);
+        
+        strcat(pergjigjja, "----------- KLIENTET AKTIVE -----------\n");
+        for (int i = 0; i < numriKlienteve; i++) {
+            sprintf(temp, "IP: %s:%d [%s] Emri: %s\n", 
+                    listaKlienteve[i].ip, 
+                    listaKlienteve[i].porti,
+                    listaKlienteve[i].eshteAdmin ? "ADMIN" : "NORMAL",
+                    listaKlienteve[i].emri);
+            strcat(pergjigjja, temp);
+        }
+        
