@@ -42,3 +42,9 @@ void kontrolloTimeout();
 void ruajMesazhin(const char* ip, int port, const char* komanda);
 void shtypKoha(char* buffer, time_t koha);
 
+struct Mesazhi {
+    char ip[20];
+    int port;
+    char komanda[5000];
+    time_t koha;
+};
