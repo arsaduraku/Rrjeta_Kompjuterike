@@ -330,5 +330,20 @@ int main() {
                     sendto(sockUdp, confirm, strlen(confirm), 0, (sockaddr*)&klientiAdresa, len);
                     continue;
                 }
+                   if (numriKlienteve >= MAX_KLIENTE) {
+                    if (numriNeRadhe < 10) {
+                        strcpy(radhaPritjes[numriNeRadhe], emriKlientit);
+                        numriNeRadhe++;
+                        
+                        char reply[200];
+                        sprintf(reply, "SERVERI ESHTE I MBUSHUR! Je ne radhe. Pozita: %d\n", numriNeRadhe);
+                        sendto(sockUdp, reply, strlen(reply), 0, (sockaddr*)&klientiAdresa, len);
+                        cout << "[PRITJE] Klienti " << emriKlientit << " ne radhe" << endl;
+                    } else {
+                        char reply[] = "RADHA ESHTE E MBUSHUR! Provo me vone.\n";
+                        sendto(sockUdp, reply, strlen(reply), 0, (sockaddr*)&klientiAdresa, len);
+                    }
+                    continue;
+                }
 
                 
