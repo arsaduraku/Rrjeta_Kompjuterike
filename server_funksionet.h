@@ -48,3 +48,7 @@ struct Mesazhi {
     char komanda[5000];
     time_t koha;
 };
+
+extern Mesazhi historikuMesazheve[1000];
+extern int numriMesazheve;
+extern int totalMesazheve;
