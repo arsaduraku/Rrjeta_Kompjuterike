@@ -134,3 +134,10 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
         return;
     }
 
+        // Komandat e adminit - kontrollo te drejtat
+    if (eshteAdmin == 0) {
+        sprintf(pergjigjja, "GABIM: Nuk keni te drejta per kete komande! Vetem admin.\n");
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+
