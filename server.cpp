@@ -260,3 +260,46 @@ int main() {
     time_t lastTimeoutCheck = time(NULL);
 
 }
+ while (true) {
+        // HTTP
+        SOCKET klientiHttp = accept(sockHttp, NULL, NULL);
+        if (klientiHttp != INVALID_SOCKET) {
+            handleHttpRequest((int)klientiHttp);
+        }
+        
+        // UDP
+        memset(buffer, 0, sizeof(buffer));
+        int bytes = recvfrom(sockUdp, buffer, sizeof(buffer)-1, 0, (sockaddr*)&klientiAdresa, &len);
+        
+        if (bytes > 0) {
+            buffer[bytes] = '\0';
+            
+          
+            int gjatesia = (int)strlen(buffer);
+            while (gjatesia > 0 && (buffer[gjatesia-1] == '\n' || buffer[gjatesia-1] == '\r')) {
+                buffer[gjatesia-1] = '\0';
+                gjatesia--;
+            }
+            
+            char ip[20];
+            strcpy(ip, inet_ntoa(klientiAdresa.sin_addr));
+            int port = ntohs(klientiAdresa.sin_port);
+            
+            cout << "[PRANOVA] '" << buffer << "' nga " << ip << ":" << port << endl;
+            ruajMesazhin(ip, port, buffer);
+            
+            // REGJISTRIMI
+            if (strncmp(buffer, "REG:", 4) == 0) {
+                int lloji = buffer[4] - '0';
+                
+                char emriKlientit[50] = "KlientPaEmer";
+                if ((int)strlen(buffer) > 6) {
+                    int start = 6;
+                    int i = 0;
+                    while (buffer[start + i] != '\0' && i < 49) {
+                        emriKlientit[i] = buffer[start + i];
+                        i++;
+                    }
+                    emriKlientit[i] = '\0';
+                }
+                
