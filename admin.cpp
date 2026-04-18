@@ -103,3 +103,33 @@ void uploadFile(char* emri, char* permbajtja, int gjatesia, char* rezultati) {
     
     sprintf(rezultati, "SUKSES: File-i '%s' u dergua (%d bytes)!\n", emri, gjatesia);
 }
+
+void downloadFile(char* emri, char* rezultati, int* gjatesiaRezultatit) {
+    while (emri[0] == ' ') {
+        for (int i = 0; i < (int)strlen(emri); i++) {
+            emri[i] = emri[i+1];
+        }
+    }
+    
+    ifstream file(emri, ios::binary);
+    if (!file.is_open()) {
+        sprintf(rezultati, "GABIM: File-i '%s' nuk u gjet!\n", emri);
+        *gjatesiaRezultatit = strlen(rezultati);
+        return;
+    }
+    
+    file.seekg(0, ios::end);
+    int madhesia = file.tellg();
+    file.seekg(0, ios::beg);
+    
+    if (madhesia > 10 * 1024 * 1024) {
+        sprintf(rezultati, "GABIM: File-i '%s' eshte shume i madh (%d bytes). Max 10MB.\n", emri, madhesia);
+        *gjatesiaRezultatit = strlen(rezultati);
+        file.close();
+        return;
+    }
+    
+    file.read(rezultati, madhesia);
+    *gjatesiaRezultatit = madhesia;
+    file.close();
+}
