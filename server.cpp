@@ -134,3 +134,86 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
         return;
     }
 
+        // Komandat e adminit - kontrollo te drejtat
+    if (eshteAdmin == 0) {
+        sprintf(pergjigjja, "GABIM: Nuk keni te drejta per kete komande! Vetem admin.\n");
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+
+        // /delete
+    if (strncmp(komanda, "/delete ", 8) == 0) {
+        char emri[200];
+        strcpy(emri, komanda + 8);
+        fshijFile(emri, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+
+        // /search
+    if (strncmp(komanda, "/search ", 8) == 0) {
+        char fjala[200];
+        strcpy(fjala, komanda + 8);
+        kerkoFile(fjala, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+    
+    // /info
+    if (strncmp(komanda, "/info ", 6) == 0) {
+        char emri[200];
+        strcpy(emri, komanda + 6);
+        infoFile(emri, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+
+        // /upload
+    if (strncmp(komanda, "/upload ", 8) == 0) {
+        char pjesa[100000];
+        strcpy(pjesa, komanda + 8);
+        
+        int pozita = -1;
+        for (int i = 0; i < (int)strlen(pjesa); i++) {
+            if (pjesa[i] == '|') {
+                pozita = i;
+                break;
+            }
+        }
+        
+        if (pozita == -1) {
+            strcpy(pergjigjja, "GABIM: Formati: /upload emri|permbajtja\n");
+            *gjatesiaPergjigjes = strlen(pergjigjja);
+            return;
+        }
+
+                char emri[200];
+        char permbajtja[100000];
+        
+        for (int i = 0; i < pozita; i++) {
+            emri[i] = pjesa[i];
+        }
+        emri[pozita] = '\0';
+        
+        int gjatesiaPermbajtjes = 0;
+        for (int i = pozita + 1; i < (int)strlen(pjesa); i++) {
+            permbajtja[gjatesiaPermbajtjes++] = pjesa[i];
+        }
+        
+        uploadFile(emri, permbajtja, gjatesiaPermbajtjes, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+
+        // /download
+    if (strncmp(komanda, "/download ", 10) == 0) {
+        char emri[200];
+        strcpy(emri, komanda + 10);
+        downloadFile(emri, pergjigjja, gjatesiaPergjigjes);
+        return;
+    }
+    
+    // Komande e panjohur
+    sprintf(pergjigjja, "KOMANDE E PANJOHUR: '%s'\n", komanda);
+    *gjatesiaPergjigjes = strlen(pergjigjja);
+}

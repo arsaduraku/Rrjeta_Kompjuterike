@@ -28,9 +28,19 @@ struct Klienti {
     int eshteAdmin;
 };
 
+struct Mesazhi {
+    char ip[20];
+    int port;
+    char komanda[5000];
+    time_t koha;
+};
+
 // Variablat globale (deklarata)
 extern Klienti listaKlienteve[10];
 extern int numriKlienteve;
+extern Mesazhi historikuMesazheve[1000];
+extern int numriMesazheve;
+extern int totalMesazheve;
 
 // Funksionet e perbashketa
 int gjejKlientin(char* ip, int porti);
@@ -41,16 +51,5 @@ void lexoFile(char* emri, char* rezultati);
 void kontrolloTimeout();
 void ruajMesazhin(const char* ip, int port, const char* komanda);
 void shtypKoha(char* buffer, time_t koha);
-
-struct Mesazhi {
-    char ip[20];
-    int port;
-    char komanda[5000];
-    time_t koha;
-};
-
-extern Mesazhi historikuMesazheve[1000];
-extern int numriMesazheve;
-extern int totalMesazheve;
 
 void handleHttpRequest(int klientiHttp);
