@@ -130,4 +130,12 @@ void handleHttpRequest(int klientiHttp) {
                 (int)strlen(pergjigjja), pergjigjja);
         send(klientiHttp, httpResponse, strlen(httpResponse), 0);
     }
-        
+        else {
+        char httpResponse[500];
+        sprintf(httpResponse, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s", 
+                40, "Gabim: Perdorni GET /stats ose GET /stats/json\n");
+        send(klientiHttp, httpResponse, strlen(httpResponse), 0);
+    }
+    
+    closesocket(klientiHttp);
+}
