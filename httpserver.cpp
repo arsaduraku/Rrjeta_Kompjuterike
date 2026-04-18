@@ -62,3 +62,19 @@ void handleHttpRequest(int klientiHttp) {
                     j++;
                 }
             }
+                        sprintf(temp, "    {\"koha\": \"%s\", \"ip\": \"%s\", \"port\": %d, \"komanda\": \"%s\"}%s\n",
+                    timeBuf,
+                    historikuMesazheve[i].ip,
+                    historikuMesazheve[i].port,
+                    komandaEscaped,
+                    (i < numriMesazheve - 1) ? "," : "");
+            strcat(pergjigjja, temp);
+        }
+        
+        strcat(pergjigjja, "  ]\n");
+        strcat(pergjigjja, "}\n");
+        
+        char httpResponse[110000];
+        sprintf(httpResponse, "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s", 
+                (int)strlen(pergjigjja), pergjigjja);
+        send(klientiHttp, httpResponse, strlen(httpResponse), 0);
