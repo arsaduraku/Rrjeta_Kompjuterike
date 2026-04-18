@@ -149,3 +149,21 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
         *gjatesiaPergjigjes = strlen(pergjigjja);
         return;
     }
+
+        // /search
+    if (strncmp(komanda, "/search ", 8) == 0) {
+        char fjala[200];
+        strcpy(fjala, komanda + 8);
+        kerkoFile(fjala, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+    
+    // /info
+    if (strncmp(komanda, "/info ", 6) == 0) {
+        char emri[200];
+        strcpy(emri, komanda + 6);
+        infoFile(emri, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
