@@ -17,6 +17,10 @@ static char radhaPritjes[10][50];
 static int numriNeRadhe = 0;
 
 // ==================== FUNKSIONET ====================
+void shtypKoha(char* buffer, time_t koha) {
+    struct tm* timeinfo = localtime(&koha);
+    strftime(buffer, 64, "%Y-%m-%d %H:%M:%S", timeinfo);
+}
 
 int gjejKlientin(char* ip, int porti) {
     for (int i = 0; i < numriKlienteve; i++) {
@@ -33,6 +37,7 @@ void listoFilet(char* rezultati) {
     
     ifstream file("temp_lista.txt");
     char rreshti[200];
+    int kaFile = 0;
     while (file.getline(rreshti, 200)) {
         if (strcmp(rreshti, "temp_lista.txt") != 0 &&
             strcmp(rreshti, "server.exe") != 0 &&
@@ -44,11 +49,14 @@ void listoFilet(char* rezultati) {
     }
     file.close();
     system("del temp_lista.txt");
+    if (kaFile == 0) {
+        strcat(rezultati, "  (Nuk ka asnje file ne server)\n");
+    }
 }
 
 void lexoFile(char* emri, char* rezultati) {
     while (emri[0] == ' ') {
-        for (int i = 0; i < strlen(emri); i++) {
+        for (int i = 0; i < (int)strlen(emri); i++) {
             emri[i] = emri[i+1];
         }
     }
@@ -59,15 +67,29 @@ void lexoFile(char* emri, char* rezultati) {
         return;
     }
     
-    rezultati[0] = '\0';
-    char rreshti[1000];
-    while (file.getline(rreshti, 1000)) {
-        strcat(rezultati, rreshti);
-        strcat(rezultati, "\n");
+    // Merr madhesine e file-it
+    file.seekg(0, ios::end);
+    int madhesia = file.tellg();
+    file.seekg(0, ios::beg);
+    
+    // Kufizo madhesine per siguri
+    if (madhesia > 50000) {
+        sprintf(rezultati, "GABIM: File-i '%s' eshte shume i madh (%d bytes). Max 50000 bytes.\n", emri, madhesia);
+        file.close();
+        return;
     }
+    
+    // Lexo permbajtjen
+    char* buffer = new char[madhesia + 1];
+    file.read(buffer, madhesia);
+    buffer[madhesia] = '\0';
     file.close();
     
+    strcpy(rezultati, buffer);
+    delete[] buffer;
+    
     if (strlen(rezultati) == 0) {
-        strcpy(rezultati, "File-i eshte bosh.\n");
+        strcpy(rezultati, "(File-i eshte bosh)\n");
     }
 }
+
