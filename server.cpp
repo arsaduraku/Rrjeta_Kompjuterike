@@ -204,3 +204,16 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
         *gjatesiaPergjigjes = strlen(pergjigjja);
         return;
     }
+
+        // /download
+    if (strncmp(komanda, "/download ", 10) == 0) {
+        char emri[200];
+        strcpy(emri, komanda + 10);
+        downloadFile(emri, pergjigjja, gjatesiaPergjigjes);
+        return;
+    }
+    
+    // Komande e panjohur
+    sprintf(pergjigjja, "KOMANDE E PANJOHUR: '%s'\n", komanda);
+    *gjatesiaPergjigjes = strlen(pergjigjja);
+}
