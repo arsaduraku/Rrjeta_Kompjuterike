@@ -345,5 +345,33 @@ int main() {
                     }
                     continue;
                 }
+                    Klienti k;
+                strcpy(k.ip, ip);
+                k.porti = port;
+                strcpy(k.emri, emriKlientit);
+                k.numriKerkesave = 0;
+                k.kohaFundit = time(NULL);
+                k.eshteAdmin = (lloji == 1) ? 1 : 0;
+                k.neTimeout = 0;
+                k.kohaTimeout = 0;
+                
+                listaKlienteve[numriKlienteve] = k;
+                numriKlienteve++;
+                
+                cout << "[LIDHJE] Klient " << (k.eshteAdmin ? "ADMIN" : "NORMAL") 
+                     << ": " << emriKlientit << " nga " << ip << endl;
+                
+                char confirm[200];
+                sprintf(confirm, "OK - Regjistrimi u krye! Mir se vini %s\n", emriKlientit);
+                sendto(sockUdp, confirm, strlen(confirm), 0, (sockaddr*)&klientiAdresa, len);
+            }
+            else if (strcmp(buffer, "/ping") == 0) {
+               
+                int idx = gjejKlientin(ip, port);
+                if (idx != -1) {
+                    listaKlienteve[idx].kohaFundit = time(NULL);
+                }
+              
+            }
 
                 
