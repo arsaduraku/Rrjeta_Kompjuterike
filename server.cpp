@@ -167,3 +167,22 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
         *gjatesiaPergjigjes = strlen(pergjigjja);
         return;
     }
+
+        // /upload
+    if (strncmp(komanda, "/upload ", 8) == 0) {
+        char pjesa[100000];
+        strcpy(pjesa, komanda + 8);
+        
+        int pozita = -1;
+        for (int i = 0; i < (int)strlen(pjesa); i++) {
+            if (pjesa[i] == '|') {
+                pozita = i;
+                break;
+            }
+        }
+        
+        if (pozita == -1) {
+            strcpy(pergjigjja, "GABIM: Formati: /upload emri|permbajtja\n");
+            *gjatesiaPergjigjes = strlen(pergjigjja);
+            return;
+        }
