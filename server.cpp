@@ -93,3 +93,44 @@ void lexoFile(char* emri, char* rezultati) {
     }
 }
 
+// ==================== PËRPUNIMI I KOMANDAVE ====================
+void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjatesiaPergjigjes) {
+    // Fillimisht pastro pergjigjjen
+    pergjigjja[0] = '\0';
+    *gjatesiaPergjigjes = 0;
+    
+    // Vonese per klientet normal
+    if (eshteAdmin == 0) {
+        Sleep(2000);
+    }
+    
+    // Komanda /ping
+    if (strcmp(komanda, "/ping") == 0) {
+        strcpy(pergjigjja, "PONG\n");
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+    
+    // Komanda /hello
+    if (strcmp(komanda, "/hello") == 0) {
+        strcpy(pergjigjja, "PERSHENDETJE! Lidhja me serverin funksionon.\n");
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+    
+    // Komanda /list
+    if (strcmp(komanda, "/list") == 0) {
+        listoFilet(pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+    
+    // Komanda /read
+    if (strncmp(komanda, "/read ", 6) == 0) {
+        char emri[200];
+        strcpy(emri, komanda + 6);
+        lexoFile(emri, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
+
