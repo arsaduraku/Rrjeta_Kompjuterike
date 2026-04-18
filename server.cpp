@@ -7,10 +7,15 @@ int PORTI_UDP = 5000;
 int PORTI_HTTP = 8080;
 int MAX_KLIENTE = 4;
 int TIMEOUT_SEKONDA = 30;
+int TIMEOUT_RRETH_PRITJE = 60;  
 
 // ==================== LISTAT ====================
-Klienti listaKlienteve[10];
+Klienti listaKlienteve[20];
 int numriKlienteve = 0;
+
+Mesazhi historikuMesazheve[1000];
+int numriMesazheve = 0;
+int totalMesazheve = 0;
 
 // Radha e pritjes per klientet
 static char radhaPritjes[10][50];
@@ -24,7 +29,29 @@ void shtypKoha(char* buffer, time_t koha) {
 
 int gjejKlientin(char* ip, int porti) {
     for (int i = 0; i < numriKlienteve; i++) {
-        if (strcmp(listaKlienteve[i].ip, ip) == 0 && listaKlienteve[i].porti == porti) {
+    if (listaKlienteve[i].neTimeout == 0 && 
+            strcmp(listaKlienteve[i].ip, ip) == 0 && 
+            listaKlienteve[i].porti == porti) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int gjejKlientinMeEmrin(char* emri) {
+    for (int i = 0; i < numriKlienteve; i++) {
+        if (listaKlienteve[i].neTimeout == 0 && 
+            strcmp(listaKlienteve[i].emri, emri) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int gjejKlientinNeTimeoutMeEmrin(char* emri) {
+    for (int i = 0; i < numriKlienteve; i++) {
+        if (listaKlienteve[i].neTimeout == 1 && 
+            strcmp(listaKlienteve[i].emri, emri) == 0) {
             return i;
         }
     }
@@ -61,7 +88,7 @@ void lexoFile(char* emri, char* rezultati) {
         }
     }
     
-    ifstream file(emri);
+    ifstream file(emri, ifstream::binary);
     if (!file.is_open()) {
         sprintf(rezultati, "GABIM: File-i '%s' nuk u gjet!\n", emri);
         return;
@@ -90,6 +117,61 @@ void lexoFile(char* emri, char* rezultati) {
     
     if (strlen(rezultati) == 0) {
         strcpy(rezultati, "(File-i eshte bosh)\n");
+    }
+}
+
+void kontrolloTimeout() {
+    time_t tani = time(NULL);
+    
+    for (int i = 0; i < numriKlienteve; i++) {
+        // Nese klienti eshte ne timeout
+        if (listaKlienteve[i].neTimeout == 1) {
+            if (tani - listaKlienteve[i].kohaTimeout > TIMEOUT_RRETH_PRITJE) {
+                cout << "[FSHI] Klienti " << listaKlienteve[i].emri << " u fshi plotesisht" << endl;
+                for (int j = i; j < numriKlienteve - 1; j++) {
+                    listaKlienteve[j] = listaKlienteve[j+1];
+                }
+                numriKlienteve--;
+                i--;
+            }
+            continue;
+        }
+        
+        // Kontrollo timeout per klientet aktiv
+        if (tani - listaKlienteve[i].kohaFundit > TIMEOUT_SEKONDA) {
+            cout << "[TIMEOUT] Klienti " << listaKlienteve[i].emri << " kaloi ne timeout" << endl;
+            listaKlienteve[i].neTimeout = 1;
+            listaKlienteve[i].kohaTimeout = tani;
+        }
+    }
+    
+    // Kontrollo radhen
+    if (numriNeRadhe > 0 && numriKlienteve < MAX_KLIENTE) {
+        cout << "[RADHE] Klienti " << radhaPritjes[0] << " tani mund te lidhet!" << endl;
+        for (int j = 1; j < numriNeRadhe; j++) {
+            strcpy(radhaPritjes[j-1], radhaPritjes[j]);
+        }
+        numriNeRadhe--;
+    }
+}
+
+void ruajMesazhin(const char* ip, int port, const char* komanda) {
+    if (numriMesazheve < 1000) {
+        strcpy(historikuMesazheve[numriMesazheve].ip, ip);
+        historikuMesazheve[numriMesazheve].port = port;
+        strcpy(historikuMesazheve[numriMesazheve].komanda, komanda);
+        historikuMesazheve[numriMesazheve].koha = time(NULL);
+        numriMesazheve++;
+        totalMesazheve++;
+    } else {
+        for (int i = 1; i < 1000; i++) {
+            historikuMesazheve[i-1] = historikuMesazheve[i];
+        }
+        strcpy(historikuMesazheve[999].ip, ip);
+        historikuMesazheve[999].port = port;
+        strcpy(historikuMesazheve[999].komanda, komanda);
+        historikuMesazheve[999].koha = time(NULL);
+        totalMesazheve++;
     }
 }
 
@@ -187,7 +269,7 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
             return;
         }
 
-                char emri[200];
+        char emri[200];
         char permbajtja[100000];
         
         for (int i = 0; i < pozita; i++) {
@@ -259,7 +341,6 @@ int main() {
     int len = sizeof(klientiAdresa);
     time_t lastTimeoutCheck = time(NULL);
 
-}
  while (true) {
         // HTTP
         SOCKET klientiHttp = accept(sockHttp, NULL, NULL);
@@ -317,7 +398,8 @@ int main() {
                     sendto(sockUdp, confirm, strlen(confirm), 0, (sockaddr*)&klientiAdresa, len);
                     continue;
                 }
-                    int idx = gjejKlientinMeEmrin(emriKlientit);
+                
+                int idx = gjejKlientinMeEmrin(emriKlientit);
                 if (idx != -1) {
                     strcpy(listaKlienteve[idx].ip, ip);
                     listaKlienteve[idx].porti = port;
@@ -345,7 +427,8 @@ int main() {
                     }
                     continue;
                 }
-                    Klienti k;
+
+                Klienti k;
                 strcpy(k.ip, ip);
                 k.porti = port;
                 strcpy(k.emri, emriKlientit);
@@ -364,9 +447,7 @@ int main() {
                 char confirm[200];
                 sprintf(confirm, "OK - Regjistrimi u krye! Mir se vini %s\n", emriKlientit);
                 sendto(sockUdp, confirm, strlen(confirm), 0, (sockaddr*)&klientiAdresa, len);
-            }
-            else if (strcmp(buffer, "/ping") == 0) {
-               
+            } else if (strcmp(buffer, "/ping") == 0) {
                 int idx = gjejKlientin(ip, port);
                 if (idx != -1) {
                     listaKlienteve[idx].kohaFundit = time(NULL);
@@ -404,4 +485,10 @@ int main() {
         
         Sleep(10);
     }
+
+    closesocket(sockUdp);
+    closesocket(sockHttp);
+    WSACleanup();
+    return 0;
+}
                 

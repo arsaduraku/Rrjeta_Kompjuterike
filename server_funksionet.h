@@ -1,5 +1,6 @@
 // server_funksionet.h 
 
+#ifndef SERVER_FUNKSIONET_H
 #define SERVER_FUNKSIONET_H
 
 #include <iostream>
@@ -7,7 +8,8 @@
 #include <ws2tcpip.h>
 #include <fstream>
 #include <ctime>
-#include <string>
+#include <cstring>
+#include <sys/stat.h>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -24,8 +26,12 @@ extern int TIMEOUT_RRETH_PRITJE;
 struct Klienti {
     char ip[20];
     int porti;
+    char emri[50];
+    int numriKerkesave;
     time_t kohaFundit;
     int eshteAdmin;
+    int neTimeout;  //1 nese eshte ne timeout, 0 nese jo
+    time_t kohaTimeout; // Kur ka hyr ne timeout
 };
 
 struct Mesazhi {
@@ -36,7 +42,7 @@ struct Mesazhi {
 };
 
 // Variablat globale (deklarata)
-extern Klienti listaKlienteve[10];
+extern Klienti listaKlienteve[20];
 extern int numriKlienteve;
 extern Mesazhi historikuMesazheve[1000];
 extern int numriMesazheve;
@@ -61,3 +67,5 @@ void downloadFile(char* emri, char* rezultati, int* gjatesiaRezultatit);
 
 // Funksionet e HTTP serverit (nga httpServer.cpp)
 void handleHttpRequest(int klientiHttp);
+
+#endif
