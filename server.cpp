@@ -317,6 +317,18 @@ int main() {
                     sendto(sockUdp, confirm, strlen(confirm), 0, (sockaddr*)&klientiAdresa, len);
                     continue;
                 }
-                
+                    int idx = gjejKlientinMeEmrin(emriKlientit);
+                if (idx != -1) {
+                    strcpy(listaKlienteve[idx].ip, ip);
+                    listaKlienteve[idx].porti = port;
+                    listaKlienteve[idx].kohaFundit = time(NULL);
+                    
+                    cout << "[RIKUPERIM] Klienti " << emriKlientit << " u rikthye" << endl;
+                    
+                    char confirm[200];
+                    sprintf(confirm, "OK - Rikthimi u krye! Mir se vini perseri %s\n", emriKlientit);
+                    sendto(sockUdp, confirm, strlen(confirm), 0, (sockaddr*)&klientiAdresa, len);
+                    continue;
+                }
 
                 
