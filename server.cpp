@@ -186,3 +186,21 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
             *gjatesiaPergjigjes = strlen(pergjigjja);
             return;
         }
+
+                char emri[200];
+        char permbajtja[100000];
+        
+        for (int i = 0; i < pozita; i++) {
+            emri[i] = pjesa[i];
+        }
+        emri[pozita] = '\0';
+        
+        int gjatesiaPermbajtjes = 0;
+        for (int i = pozita + 1; i < (int)strlen(pjesa); i++) {
+            permbajtja[gjatesiaPermbajtjes++] = pjesa[i];
+        }
+        
+        uploadFile(emri, permbajtja, gjatesiaPermbajtjes, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
