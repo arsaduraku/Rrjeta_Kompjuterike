@@ -217,3 +217,46 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
     sprintf(pergjigjja, "KOMANDE E PANJOHUR: '%s'\n", komanda);
     *gjatesiaPergjigjes = strlen(pergjigjja);
 }
+
+// ==================== MAIN ====================
+int main() {
+    WSADATA wsa;
+    WSAStartup(MAKEWORD(2, 2), &wsa);
+    
+    cout << "\n==============================================\n";
+    cout << "     SERVERI I RRJETAVE KOMPJUTERIKE          \n";
+    cout << "==============================================\n";
+    cout << "  UDP Port: " << PORTI_UDP << "\n";
+    cout << "  HTTP Port: " << PORTI_HTTP << "\n";
+    cout << "  Max Kliente: " << MAX_KLIENTE << "\n";
+    cout << "  Timeout: " << TIMEOUT_SEKONDA << " sekonda\n";
+    cout << "==============================================\n\n";
+    
+    SOCKET sockUdp = socket(AF_INET, SOCK_DGRAM, 0);
+    sockaddr_in adresaUdp;
+    adresaUdp.sin_family = AF_INET;
+    adresaUdp.sin_port = htons(PORTI_UDP);
+    adresaUdp.sin_addr.s_addr = INADDR_ANY;
+    bind(sockUdp, (sockaddr*)&adresaUdp, sizeof(adresaUdp));
+    cout << "[UDP] Serveri ka filluar ne portin " << PORTI_UDP << endl;
+    
+    SOCKET sockHttp = socket(AF_INET, SOCK_STREAM, 0);
+    sockaddr_in adresaHttp;
+    adresaHttp.sin_family = AF_INET;
+    adresaHttp.sin_port = htons(PORTI_HTTP);
+    adresaHttp.sin_addr.s_addr = INADDR_ANY;
+    bind(sockHttp, (sockaddr*)&adresaHttp, sizeof(adresaHttp));
+    listen(sockHttp, 5);
+    cout << "[HTTP] Serveri HTTP ne portin " << PORTI_HTTP << endl;
+    cout << "[UDP] Ne pritje te klienteve...\n\n";
+    
+    u_long mode = 1;
+    ioctlsocket(sockUdp, FIONBIO, &mode);
+    ioctlsocket(sockHttp, FIONBIO, &mode);
+    
+    char buffer[200000];
+    sockaddr_in klientiAdresa;
+    int len = sizeof(klientiAdresa);
+    time_t lastTimeoutCheck = time(NULL);
+
+}

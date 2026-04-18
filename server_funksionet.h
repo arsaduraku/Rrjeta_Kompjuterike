@@ -59,4 +59,5 @@ void infoFile(char* emri, char* rezultati);
 void uploadFile(char* emri, char* permbajtja, int gjatesia, char* rezultati);
 void downloadFile(char* emri, char* rezultati, int* gjatesiaRezultatit);
 
+// Funksionet e HTTP serverit (nga httpServer.cpp)
 void handleHttpRequest(int klientiHttp);
