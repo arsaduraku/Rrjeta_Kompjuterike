@@ -1,4 +1,4 @@
-// klient.cpp - Version pa thread (me ping manual)
+// klient.cpp
 
 #include <iostream>
 #include <winsock2.h>
@@ -30,10 +30,7 @@ int main() {
     int timeout = 5000;
     setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout));
 
-
-    time_t lastPing = time(NULL);
-
-        int llojiKlientit;
+    int llojiKlientit;
     cout << "\n";
     cout << "========================================\n";
     cout << "     KLIENTI I RRJETAVE KOMPJUTERIKE    \n";
@@ -48,8 +45,29 @@ int main() {
     char emriKlientit[50];
     cout << "Shkruani emrin tuaj (per identifikim, p.sh. Klient1): ";
     cin.getline(emriKlientit, 50);
-
-        time_t lastPing = time(NULL);
+    
+    // Regjistrohu me emer 
+    char mesazhiRegjistrimit[100];
+    sprintf(mesazhiRegjistrimit, "REG:%d:%s", llojiKlientit, emriKlientit);
+    sendto(sock, mesazhiRegjistrimit, strlen(mesazhiRegjistrimit), 0,
+           (sockaddr*)&adresaServerit, sizeof(adresaServerit));
+    
+    char bufferKonfirmim[1024];
+    sockaddr_in adresaNga;
+    int gjatesia = sizeof(adresaNga);
+    int numri = recvfrom(sock, bufferKonfirmim, 1024, 0, (sockaddr*)&adresaNga, &gjatesia);
+    
+    if (numri > 0) {
+        bufferKonfirmim[numri] = '\0';
+        cout << bufferKonfirmim << endl;
+    } else {
+        cout << "Gabim: Nuk u mor pergjigje nga serveri per regjistrim!\n";
+        closesocket(sock);
+        WSACleanup();
+        return 1;
+    }
+    
+    time_t lastPing = time(NULL);
     
     if (llojiKlientit == 1) {
         cout << "\n========== KLIENTI ADMIN ==========\n";
@@ -81,7 +99,7 @@ int main() {
     sockaddr_in adresaPergjigjes;
     int gjatesiaPergjigjes = sizeof(adresaPergjigjes);
 
-        while (true) {
+    while (true) {
         if (llojiKlientit == 1) {
             cout << "admin> ";
         } else {
@@ -120,7 +138,7 @@ int main() {
         }
     }
 
-        closesocket(sock);
+    closesocket(sock);
     WSACleanup();
     return 0;
 }
