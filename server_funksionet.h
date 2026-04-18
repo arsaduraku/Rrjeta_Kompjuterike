@@ -18,6 +18,7 @@ extern int PORTI_UDP;
 extern int PORTI_HTTP;
 extern int MAX_KLIENTE;
 extern int TIMEOUT_SEKONDA;
+extern int TIMEOUT_RRETH_PRITJE; 
 
 // Struktura per klient
 struct Klienti {
@@ -36,5 +37,5 @@ int gjejKlientin(char* ip, int porti);
 void listoFilet(char* rezultati);
 void lexoFile(char* emri, char* rezultati);
 void kontrolloTimeout();
-void ruajMesazhin(const char* ip, int port, const char* komanda);
+
 

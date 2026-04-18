@@ -12,6 +12,10 @@ int TIMEOUT_SEKONDA = 30;
 Klienti listaKlienteve[10];
 int numriKlienteve = 0;
 
+// Radha e pritjes per klientet
+static char radhaPritjes[10][50];
+static int numriNeRadhe = 0;
+
 // ==================== FUNKSIONET ====================
 
 int gjejKlientin(char* ip, int porti) {
