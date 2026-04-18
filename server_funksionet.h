@@ -34,8 +34,13 @@ extern int numriKlienteve;
 
 // Funksionet e perbashketa
 int gjejKlientin(char* ip, int porti);
+int gjejKlientinMeEmrin(char* emri);
+int gjejKlientinNeTimeoutMeEmrin(char* emri);
 void listoFilet(char* rezultati);
 void lexoFile(char* emri, char* rezultati);
 void kontrolloTimeout();
+void ruajMesazhin(const char* ip, int port, const char* komanda);
+void shtypKoha(char* buffer, time_t koha);
+
 
 
