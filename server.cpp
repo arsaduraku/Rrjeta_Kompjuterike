@@ -302,4 +302,21 @@ int main() {
                     }
                     emriKlientit[i] = '\0';
                 }
+                 int idxTimeout = gjejKlientinNeTimeoutMeEmrin(emriKlientit);
+                if (idxTimeout != -1) {
+                    strcpy(listaKlienteve[idxTimeout].ip, ip);
+                    listaKlienteve[idxTimeout].porti = port;
+                    listaKlienteve[idxTimeout].kohaFundit = time(NULL);
+                    listaKlienteve[idxTimeout].neTimeout = 0;
+                    listaKlienteve[idxTimeout].numriKerkesave = 0;
+                    
+                    cout << "[RIKUPERIM] Klienti " << emriKlientit << " u rikthye nga timeout" << endl;
+                    
+                    char confirm[200];
+                    sprintf(confirm, "OK - Rikthimi nga timeout u krye! Mir se vini perseri %s\n", emriKlientit);
+                    sendto(sockUdp, confirm, strlen(confirm), 0, (sockaddr*)&klientiAdresa, len);
+                    continue;
+                }
+                
+
                 
