@@ -141,3 +141,11 @@ void perpunoKomanden(char* komanda, int eshteAdmin, char* pergjigjja, int* gjate
         return;
     }
 
+        // /delete
+    if (strncmp(komanda, "/delete ", 8) == 0) {
+        char emri[200];
+        strcpy(emri, komanda + 8);
+        fshijFile(emri, pergjigjja);
+        *gjatesiaPergjigjes = strlen(pergjigjja);
+        return;
+    }
