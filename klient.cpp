@@ -119,3 +119,8 @@ int main() {
             cout << "Gabim: Nuk u mor pergjigje nga serveri (timeout)! Kontrollo lidhjen.\n";
         }
     }
+
+        closesocket(sock);
+    WSACleanup();
+    return 0;
+}
