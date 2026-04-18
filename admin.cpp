@@ -79,3 +79,27 @@ void infoFile(char* emri, char* rezultati) {
             kohaKrijimit,
             kohaModifikimit);
 }
+
+void uploadFile(char* emri, char* permbajtja, int gjatesia, char* rezultati) {
+    while (emri[0] == ' ') {
+        for (int i = 0; i < (int)strlen(emri); i++) {
+            emri[i] = emri[i+1];
+        }
+    }
+    
+    if (strcmp(emri, "server.exe") == 0 || strcmp(emri, "klient.exe") == 0) {
+        sprintf(rezultati, "GABIM: Nuk mund te mbishkruhet file-i i sistemit!\n");
+        return;
+    }
+    
+    ofstream file(emri, ios::binary);
+    if (!file.is_open()) {
+        sprintf(rezultati, "GABIM: Nuk mund te krijohet file-i '%s'!\n", emri);
+        return;
+    }
+    
+    file.write(permbajtja, gjatesia);
+    file.close();
+    
+    sprintf(rezultati, "SUKSES: File-i '%s' u dergua (%d bytes)!\n", emri, gjatesia);
+}
