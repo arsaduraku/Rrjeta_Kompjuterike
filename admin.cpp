@@ -48,3 +48,34 @@ void kerkoFile(char* fjala, char* rezultati) {
         strcat(rezultati, "  Nuk u gjet asnje file.\n");
     }
 }
+
+void infoFile(char* emri, char* rezultati) {
+    while (emri[0] == ' ') {
+        for (int i = 0; i < (int)strlen(emri); i++) {
+            emri[i] = emri[i+1];
+        }
+    }
+    
+    struct _stat fileStat;
+    if (_stat(emri, &fileStat) != 0) {
+        sprintf(rezultati, "GABIM: File-i '%s' nuk u gjet!\n", emri);
+        return;
+    }
+    
+    char kohaKrijimit[64];
+    char kohaModifikimit[64];
+    
+    shtypKoha(kohaKrijimit, fileStat.st_ctime);
+    shtypKoha(kohaModifikimit, fileStat.st_mtime);
+    
+    sprintf(rezultati, 
+            "========== INFO PER FILE: %s ==========\n"
+            "  Madhesia: %lld bytes\n"
+            "  Krijuar: %s\n"
+            "  Modifikuar: %s\n"
+            "========================================\n",
+            emri, 
+            (long long)fileStat.st_size,
+            kohaKrijimit,
+            kohaModifikimit);
+}
