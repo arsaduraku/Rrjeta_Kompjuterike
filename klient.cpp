@@ -48,3 +48,35 @@ int main() {
     char emriKlientit[50];
     cout << "Shkruani emrin tuaj (per identifikim, p.sh. Klient1): ";
     cin.getline(emriKlientit, 50);
+
+        time_t lastPing = time(NULL);
+    
+    if (llojiKlientit == 1) {
+        cout << "\n========== KLIENTI ADMIN ==========\n";
+        cout << "Komandat:\n";
+        cout << "  /list                           - Listo te gjithe filet\n";
+        cout << "  /read <filename>                - Lexo permbajtjen e nje file-i\n";
+        cout << "  /delete <filename>              - Fshij nje file\n";
+        cout << "  /search <keyword>               - Kerko file nga emri\n";
+        cout << "  /info <filename>                - Info per file (madh. data)\n";
+        cout << "  /upload <filename>|<content>    - Dergo file ne server\n";
+        cout << "  /download <filename>            - Shkarko file nga serveri\n";
+        cout << "  /hello                          - Test lidhjeje\n";
+        cout << "  /exit                           - Dil\n";
+        cout << "===================================\n\n";
+        cout << "Shembull upload: /upload test.txt|Pershendetje bote!\n";
+        cout << "Shembull download: /download test.txt\n\n";
+    } else {
+        cout << "\n========== KLIENTI NORMAL ==========\n";
+        cout << "Komandat:\n";
+        cout << "  /list              - Listo te gjithe filet\n";
+        cout << "  /read <filename>   - Lexo permbajtjen e nje file-i\n";
+        cout << "  /hello             - Test lidhjeje\n";
+        cout << "  /exit              - Dil\n";
+        cout << "====================================\n\n";
+        cout << "SHENIM: Klientet normal kane vonese 2 sekonda per pergjigje\n\n";
+    }
+    
+    char buffer[200000];
+    sockaddr_in adresaPergjigjes;
+    int gjatesiaPergjigjes = sizeof(adresaPergjigjes);
