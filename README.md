@@ -92,7 +92,63 @@ klient.exe
 /download test.txt
 ```
 
----
+## Monitorimi përmes HTTP
+
+Hap në browser:
+
+```
+http://localhost:8080/stats
+```
+
+Statistika në JSON:
+
+```
+http://localhost:8080/stats/json
+```
+
+### Shembull JSON
+
+```json
+{
+  "lidhje_aktive": 2,
+  "max_kliente": 4,
+  "total_mesazhe": 15,
+  "klientet": [...],
+  "mesazhet_e_fundit": [...]
+}
+```
+## Struktura e Projektit
+
+```
+project-folder/
+│
+├── server.cpp
+│   Logjika kryesore e serverit UDP
+│   Menaxhon klientët dhe përpunon komandat
+│
+├── server_funksionet.h
+│   Deklarimet e funksioneve të serverit
+│
+├── admin.cpp
+│   Implementimi i komandave të adminit
+│
+├── httpServer.cpp
+│   HTTP server për monitorim në portin 8080
+│   Ofron statistika në Text dhe JSON
+│
+├── klient.cpp
+│   Aplikacioni i klientit
+│   Dërgon komanda te serveri përmes UDP
+│
+├── README.md
+│   Dokumentacioni i projektit
+│
+└── server.exe / klient.exe
+    Programet e kompiluara (gjenerohen pas build-it)
+```
+
+
+
 
 
 
