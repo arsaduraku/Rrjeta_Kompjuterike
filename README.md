@@ -60,3 +60,19 @@ g++ klient.cpp -o klient.exe -lws2_32
 ```bash
 klient.exe
 ```
+Komandat
+Komandat për Admin
+/list
+/read <filename>
+/upload <filename>|<content>
+/download <filename>
+/delete <filename>
+/search <keyword>
+/info <filename>
+/hello
+/exit
+Komandat për Përdorues Normal
+/list
+/read <filename>
+/hello
+/exit
