@@ -60,33 +60,40 @@ g++ klient.cpp -o klient.exe -lws2_32
 ```bash
 klient.exe
 ```
-Komandat
 
-Komandat për Admin
+## Komandat
 
-/list
+### Komandat për Admin
 
-/read <filename>
+* `/list` – Shfaq listën e file-ave në server
+* `/read <filename>` – Lexon përmbajtjen e një file-i
+* `/upload <filename>|<content>` – Ngarkon një file me përmbajtje
+* `/download <filename>` – Shkarkon një file
+* `/delete <filename>` – Fshin një file
+* `/search <keyword>` – Kërkon fjalë kyçe në file-a
+* `/info <filename>` – Jep informata për file-in
+* `/hello` – Kontroll lidhjen me serverin
+* `/exit` – Del nga klienti
 
-/upload <filename>|<content>
+### Komandat për Përdorues Normal
 
-/download <filename>
+* `/list` – Shfaq listën e file-ave
+* `/read <filename>` – Lexon një file
+* `/hello` – Kontroll lidhjen
+* `/exit` – Del nga aplikacioni
 
-/delete <filename>
+---
 
-/search <keyword>
+## Shembull Përdorimi
 
-/info <filename>
+```bash
+/upload test.txt|Pershendetje
+/read test.txt
+/download test.txt
+```
 
-/hello
+---
 
-/exit
 
-Komandat për Përdorues Normal
-/list
 
-/read <filename>
 
-/hello
-
-/exit
