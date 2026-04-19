@@ -37,3 +37,26 @@ Serveri menaxhon klientët aktivë, përpunon komandat, kontrollon të drejtat e
 * Windows 7 / 8 / 10 / 11
 * Kompajler g++ ose MSVC
 * Biblioteka Winsock (`ws2_32.lib`)
+
+
+## Kompilimi dhe Ekzekutimi
+
+### Kompilimi i Serverit
+```bash
+g++ server.cpp admin.cpp httpServer.cpp -o server.exe -lws2_32
+```
+
+### Nisja e Serverit
+```bash
+server.exe
+```
+
+### Kompilimi i Klientit
+```bash
+g++ klient.cpp -o klient.exe -lws2_32
+```
+
+### Nisja e Klientit
+```bash
+klient.exe
+```
