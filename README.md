@@ -149,7 +149,28 @@ project-folder/
 
 
 
+## Shënime
 
+- Klienti identifikohet nga:
+  - Adresa IP
+  - Porti
+  - Koha e fundit aktive
+
+- Klienti dërgon automatikisht një mesazh `/ping` për të mbajtur lidhjen aktive dhe për të shmangur timeout-in.
+
+- Serveri operon në direktoriumin aktual ku ekzekutohet programi (file-at ruhen dhe lexohen aty).
+
+
+
+## Qëllimi i Projektit
+
+Ky projekt demonstron në praktikë:
+
+- Programim të rrjeteve kompjuterike  
+- Komunikim me socket  
+- Menaxhim të file-ave  
+- Kontroll të qasjes bazuar në role  
+- Monitorim bazik përmes web-it  
 
 
 
